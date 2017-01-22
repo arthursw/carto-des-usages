@@ -7,33 +7,43 @@ let rennesLatMin = -1.753280
 let rennesLatMax = -1.591461
 let rennesLatHeight = rennesLatMax - rennesLatMin
 
-function sendSpacebrewCommand(coords) {
+function sendSpacebrewCommand(data) {
+	json = JSON.stringify(data)
+	console.log("Spacebrew: " + json)
+	spacebrew.send("command", "string", json)
+}
+function sendSpacebrewPenCommand(direction) {
 
+	data = {
+		type: 'pen',
+		direction: direction
+	}
+	sendSpacebrewCommand(data)
+}
+function sendSpacebrewPenDownCommand() {
+	sendSpacebrewPenCommand('down')
+}
+function sendSpacebrewPenUpCommand() {
+	sendSpacebrewPenCommand('up')
+}
 
+function sendSpacebrewGotoCommand(coords) {
 	// x = (coords.longitude - rennesLongMin) / rennesLongWidth
 	// y = (coords.latitude - rennesLatMin) / rennesLatHeight
-
 	data = {
 		type: 'goTo',
 		point: { x: coords.longitude, y: coords.latitude },
 		bounds: { x: rennesLongMin, y: rennesLatMin, width: rennesLongWidth, height: rennesLatHeight },
 		scale: 100
 	}
-
-	json = JSON.stringify(data)
-
-	console.log("Spacebrew: " + json)
-
-	spacebrew.send("command", "string", json)
-
-
+	sendSpacebrewCommand(data)
 }
 
 $(document).ready( function() {
-	var x = document.getElementById("demo");
+	var x = document.getElementById("info");
 
 	function getFakeLocation() {
-		// sendSpacebrewCommand({ longitude: rennesLongMin + Math.random() * rennesLongWidth, latitude: rennesLatMin + Math.random() * rennesLatHeight })
+		// sendSpacebrewGotoCommand({ longitude: rennesLongMin + Math.random() * rennesLongWidth, latitude: rennesLatMin + Math.random() * rennesLatHeight })
 		let r = Math.random()
 		let p = { longitude: 0, latitude: 0 }
 		if(r<0.25) {
@@ -49,7 +59,7 @@ $(document).ready( function() {
 			p.longitude = rennesLongMin
 			p.latitude = rennesLatMax
 		}
-		sendSpacebrewCommand(p)
+		sendSpacebrewGotoCommand(p)
 	}
 
 	function getLocation() {
@@ -66,7 +76,7 @@ $(document).ready( function() {
 	}
 	function showPosition(position) {
 		console.log("position.coords: long: " + position.coords.longitude + ", lat: " + position.coords.latitude)
-		sendSpacebrewCommand(position.coords)
+		sendSpacebrewGotoCommand(position.coords)
 	    x.innerHTML = "Latitude: " + position.coords.latitude +
 	    "<br>Longitude: " + position.coords.longitude;
 
@@ -75,10 +85,7 @@ $(document).ready( function() {
 		console.log("geo error: " + error.message)
 	}
 
-	// getLocation()
 	setInterval(getLocation, 10000)
-
-
 
 
 	// server = "272d6640.ngrok.io"
@@ -92,6 +99,7 @@ $(document).ready( function() {
 
 	spacebrew.onOpen = function() {
 		console.log("Connected as " + spacebrew.name() + ".")
+		sendSpacebrewPenDownCommand()
 		return
 	}
 	spacebrew.onClose = function() {
@@ -110,8 +118,4 @@ $(document).ready( function() {
 
 	spacebrew.addPublish("commands", "string", "")
 	spacebrew.addPublish("command", "string", "")
-
-
-
-
 })
