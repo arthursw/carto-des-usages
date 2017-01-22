@@ -8,7 +8,7 @@ let rennesLatMax = -1.591461
 let rennesLatHeight = rennesLatMax - rennesLatMin
 
 function sendSpacebrewCommand(coords) {
-	
+
 
 	// x = (coords.longitude - rennesLongMin) / rennesLongWidth
 	// y = (coords.latitude - rennesLatMin) / rennesLatHeight
@@ -26,7 +26,7 @@ function sendSpacebrewCommand(coords) {
 
 	spacebrew.send("command", "string", json)
 
-	
+
 }
 
 $(document).ready( function() {
@@ -61,22 +61,22 @@ $(document).ready( function() {
 	        x.innerHTML = "Geolocation is not supported by this browser.";
 	    }
 
-		
+
 
 	}
 	function showPosition(position) {
 		console.log("position.coords: long: " + position.coords.longitude + ", lat: " + position.coords.latitude)
 		sendSpacebrewCommand(position.coords)
-	    x.innerHTML = "Latitude: " + position.coords.latitude + 
-	    "<br>Longitude: " + position.coords.longitude; 
+	    x.innerHTML = "Latitude: " + position.coords.latitude +
+	    "<br>Longitude: " + position.coords.longitude;
 
 	}
 	function geo_error(error) {
 		console.log("geo error: " + error.message)
 	}
-	
+
 	// getLocation()
-	setInterval(getFakeLocation, 100)
+	setInterval(getLocation, 10000)
 
 
 
@@ -85,7 +85,7 @@ $(document).ready( function() {
 	// server = "localhost"
 	// server = "109.8.223.17"
 	server = "sandbox.spacebrew.cc"
-	name = "Romanesco"
+	name = "cartoDesUsages"
 	description = "Tipibot commands."
 
 	spacebrew = new Spacebrew.Client(server, name, description, {port: 9000})
