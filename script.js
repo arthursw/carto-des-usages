@@ -1,11 +1,11 @@
 var spacebrew = null
 
-let rennesLongMin = 48.147877
-let rennesLongMax = 48.076603
-let rennesLongWidth = rennesLongMax - rennesLongMin
-let rennesLatMin = -1.753280
-let rennesLatMax = -1.591461
-let rennesLatHeight = rennesLatMax - rennesLatMin
+let rennesLatMin = 48.147877
+let rennesLatMax = 48.076603
+let rennesLatWidth = rennesLatMax - rennesLatMin
+let rennesLongMin = -1.753280
+let rennesLongMax = -1.591461
+let rennesLongHeight = rennesLongMax - rennesLongMin
 
 function sendSpacebrewCommand(data) {
 	json = JSON.stringify(data)
