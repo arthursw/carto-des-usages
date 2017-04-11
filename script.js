@@ -7,11 +7,20 @@ let rennesLongMin = -1.753280
 let rennesLongMax = -1.591461
 let rennesLongWidth = rennesLongMax - rennesLongMin
 
+// var tipiSocket = new WebSocket("ws://localhost:8025/tipibot");
+var tipiSocket = new WebSocket("wss://ff724879.ngrok.io/tipibot");
+
 function sendSpacebrewCommand(data) {
-	json = JSON.stringify(data)
+	let json = JSON.stringify(data)
 	console.log("Spacebrew: " + json)
-	spacebrew.send("command", "string", json)
+	// spacebrew.send("command", "string", json)
+
+	if(tipiSocket.readyState == WebSocket.OPEN){
+		tipiSocket.send(json);
+	}
+
 }
+
 function sendSpacebrewPenCommand(direction) {
 
 	data = {
@@ -85,37 +94,43 @@ $(document).ready( function() {
 		console.log("geo error: " + error.message)
 	}
 
+	// setInterval(getFakeLocation, 750)
 	setInterval(getLocation, 10000)
 
 
-	// server = "272d6640.ngrok.io"
+	// // server = "272d6640.ngrok.io"
 	// server = "localhost"
-	// server = "109.8.223.17"
-	server = "sandbox.spacebrew.cc"
-	name = "cartoDesUsages"
-	description = "Tipibot commands."
+	// // server = "109.8.223.17"
+	// // server = "sandbox.spacebrew.cc"
+	// name = "cartoDesUsages"
+	// description = "Tipibot commands."
 
-	spacebrew = new Spacebrew.Client(server, name, description, {port: 9000})
+	// spacebrew = new Spacebrew.Client(server, name, description, {port: 9000})
 
-	spacebrew.onOpen = function() {
-		console.log("Connected as " + spacebrew.name() + ".")
-		sendSpacebrewPenDownCommand()
-		return
-	}
-	spacebrew.onClose = function() {
-		console.log("Connected closed .")
-		return
-	}
-	spacebrew.onStringMessage = function(m) {
-		console.log("Connected sm :"+ m)
-		return
-	}
-	spacebrew.onCustomMessage = function(m) {
-		console.log("Connected cm: " + m)
-		return
-	}
-	spacebrew.connect()
+	// spacebrew.onOpen = function() {
+	// 	console.log("Connected as " + spacebrew.name() + ".")
+	// 	sendSpacebrewPenDownCommand()
+	// 	return
+	// }
+	// spacebrew.onClose = function() {
+	// 	console.log("Connected closed .")
+	// 	return
+	// }
+	// spacebrew.onStringMessage = function(m) {
+	// 	console.log("Connected sm :"+ m)
+	// 	return
+	// }
+	// spacebrew.onCustomMessage = function(m) {
+	// 	console.log("Connected cm: " + m)
+	// 	return
+	// }
+	// spacebrew.connect()
 
-	spacebrew.addPublish("commands", "string", "")
-	spacebrew.addPublish("command", "string", "")
+	// spacebrew.addPublish("commands", "string", "")
+	// spacebrew.addPublish("command", "string", "")
+
+
+	tipiSocket.onopen = function (event) {
+		// tipiSocket.send("Here's some text that the server is urgently awaiting!");
+	};
 })
