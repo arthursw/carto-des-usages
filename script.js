@@ -1,14 +1,14 @@
 var spacebrew = null
 
-let rennesLatMin = 48.147877
-let rennesLatMax = 48.076603
+let rennesLatMin = 48.076603
+let rennesLatMax = 48.147877
 let rennesLatHeight = rennesLatMax - rennesLatMin
 let rennesLongMin = -1.753280
 let rennesLongMax = -1.591461
 let rennesLongWidth = rennesLongMax - rennesLongMin
 
 // var tipiSocket = new WebSocket("ws://localhost:8025/tipibot");
-var tipiSocket = new WebSocket("wss://6f43b576.ngrok.io/tipibot");
+var tipiSocket = null;
 
 console.nativeLog = console.log;
 console.nativeError = console.error;
@@ -27,8 +27,17 @@ console.error = function(message) {
 
 window.onerror = function(error, url, line) {
 	debugEl = document.getElementById("debug")
-	debugEl.innerHTML += '<div class="error"><span class="line">' + line + '</span><span class="url">' + url + '</span>' + error + '</div>'
+	debugEl.innerHTML += '<div class="error"><span class="line">' + line + '</span>: <span class="url">' + url + '</span>: ' + error + '</div>'
 };
+
+function connectWebsocket() {
+	let url = document.getElementsByName('websocket-url')[0].value
+	
+	if(tipiSocket != null && tipiSocket.readyState == WebSocket.OPEN) {
+		tipiSocket.close();
+	}
+	tipiSocket = new WebSocket("wss://"+url);
+}
 
 function sendSpacebrewCommand(data) {
 	let json = JSON.stringify(data)
@@ -40,6 +49,57 @@ function sendSpacebrewCommand(data) {
 	}
 
 }
+
+function getLocation() {
+    console.log("get location")
+    if (navigator.geolocation) {
+    	navigator.geolocation.getCurrentPosition(showPosition)
+        // navigator.geolocation.watchPosition(showPosition, geo_error, {enableHighAccuracy:true, maximumAge:1000, timeout:1000});
+    } else {
+    	let info = document.getElementById("info");
+        info.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+	console.log("position.coords: long: " + position.coords.longitude + ", lat: " + position.coords.latitude)
+	sendSpacebrewGotoCommand(position.coords)
+	let info = document.getElementById("info");
+    info.innerHTML = "Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+}
+
+var gpsOn = false;
+var gpsTimerId = -1;
+
+function GPSoffClicked() {
+	let gpsOnBtn = document.getElementById("GPSon");
+	let gpsOffBtn = document.getElementById("GPSoff");
+	gpsOnBtn.className = '';
+	gpsOffBtn.className = 'hidden';
+	gpsOn = false;
+	let gpsStatus = document.getElementById("gps-status");
+	gpsStatus.innerHTML = "Not sending GPS locations."
+	clearInterval(gpsTimerId);
+}
+
+function GPSonClicked() {
+	let gpsOnBtn = document.getElementById("GPSon");
+	let gpsOffBtn = document.getElementById("GPSoff");
+	gpsOnBtn.className = 'hidden';
+	gpsOffBtn.className = '';
+	gpsOn = true;
+	let gpsStatus = document.getElementById("gps-status");
+	gpsStatus.innerHTML = "Sending GPS locations."
+	gpsTimerId = setInterval(getLocation, 10000)
+}
+
+// function setBounds() {
+// 	rennesLatMin = document.getElementsByName('min-lat')[0].value
+// 	rennesLatMax = document.getElementsByName('max-lat')[0].value
+// 	rennesLongMin = document.getElementsByName('min-long')[0].value
+// 	rennesLongMax = document.getElementsByName('max-long')[0].value
+// }
 
 function sendSpacebrewPenCommand(direction) {
 
@@ -67,6 +127,12 @@ function sendSpacebrewLocation() {
 function sendSpacebrewGotoCommand(coords) {
 	// x = (coords.longitude - rennesLongMin) / rennesLongWidth
 	// y = (coords.latitude - rennesLatMin) / rennesLatHeight
+
+	rennesLatMin = document.getElementsByName('min-lat')[0].value
+	rennesLatMax = document.getElementsByName('max-lat')[0].value
+	rennesLongMin = document.getElementsByName('min-long')[0].value
+	rennesLongMax = document.getElementsByName('max-long')[0].value
+
 	data = {
 		type: 'goTo',
 		point: { x: coords.longitude, y: coords.latitude },
@@ -87,7 +153,7 @@ function closeConsole(event) {
 
 $(document).ready( function() {
 
-	var x = document.getElementById("info");
+	connectWebsocket();
 
 	function getFakeLocation() {
 		// sendSpacebrewGotoCommand({ longitude: rennesLongMin + Math.random() * rennesLongWidth, latitude: rennesLatMin + Math.random() * rennesLatHeight })
@@ -109,31 +175,12 @@ $(document).ready( function() {
 		sendSpacebrewGotoCommand(p)
 	}
 
-	function getLocation() {
-	    console.log("get location")
-	    if (navigator.geolocation) {
-	    	navigator.geolocation.getCurrentPosition(showPosition)
-	        // navigator.geolocation.watchPosition(showPosition, geo_error, {enableHighAccuracy:true, maximumAge:1000, timeout:1000});
-	    } else {
-	        x.innerHTML = "Geolocation is not supported by this browser.";
-	    }
-
-
-
-	}
-	function showPosition(position) {
-		console.log("position.coords: long: " + position.coords.longitude + ", lat: " + position.coords.latitude)
-		sendSpacebrewGotoCommand(position.coords)
-	    x.innerHTML = "Latitude: " + position.coords.latitude +
-	    "<br>Longitude: " + position.coords.longitude;
-
-	}
 	function geo_error(error) {
 		console.log("geo error: " + error.message)
 	}
 
 	// setInterval(getFakeLocation, 750)
-	setInterval(getLocation, 10000)
+	
 
 
 	// // server = "272d6640.ngrok.io"

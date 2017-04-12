@@ -13,9 +13,22 @@
     <button onclick="sendSpacebrewPenDownCommand()">Pen down</button>
     <button onclick="sendSpacebrewPenUpCommand()">Pen up</button>
     <div>
-      <div>x: <input type="number" name="x" step="any" value="48.110150999999995"/></div>
-      <div>- y: <input type="number" name="y" step="any" value="-1.6734719999999998"/></div>
-      <button onclick="sendSpacebrewLocation()">Send location</button>
+      <div>Websocket server url: <input type="url" name="websocket-url" value="6f43b576.ngrok.io/tipibot"/></div>
+      <button onclick="connectWebsocket()">Connect websocket</button>
+
+      <div>Min lat: <input type="number" name="min-lat" step="any" value="48.147877"/></div>
+      <div>Max lat: <input type="number" name="max-lat" step="any" value="48.076603"/></div>
+      <div>Min long: <input type="number" name="min-long" step="any" value="-1.753280"/></div>
+      <div>Max long: <input type="number" name="max-long" step="any" value="-1.591461"/></div>
+      <!-- <button onclick="setBounds()">Set bounds</button> -->
+
+      <div>x: <input type="number" name="x" step="any" value="-1.6734719999999998"/></div>
+      <div>- y: <input type="number" name="y" step="any" value="48.110150999999995"/></div>
+      <button onclick="sendSpacebrewLocation()">Send custom location</button>
+
+      <button id="GPSon" onclick="GPSonClicked()">Start sending GPS location...</button>
+      <button id="GPSoff" onclick="GPSoffClicked()">Stop sending GPS location...</button>
+      <div id="gps-status">Not sending GPS locations.</div>
     </div>
     <div id="info"></div>
     <div id="console">
