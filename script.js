@@ -132,7 +132,18 @@ function sendSpacebrewGotoCommand(coords) {
 	rennesLatMax = document.getElementsByName('max-lat')[0].value
 	rennesLongMin = document.getElementsByName('min-long')[0].value
 	rennesLongMax = document.getElementsByName('max-long')[0].value
-
+	if(coords.longitude < rennesLongMin) {
+		coords.longitude = rennesLongMin;
+	}
+	if(coords.longitude > rennesLongMax) {
+		coords.longitude = rennesLongMax;
+	}
+	if(coords.latitude < rennesLatMin) {
+		coords.latitude = rennesLatMin;
+	}
+	if(coords.latitude > rennesLatMax) {
+		coords.latitude = rennesLatMax;
+	}
 	data = {
 		type: 'goTo',
 		point: { x: coords.longitude, y: coords.latitude },
