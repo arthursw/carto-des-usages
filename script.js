@@ -56,6 +56,14 @@ function sendSpacebrewPenUpCommand() {
 	sendSpacebrewPenCommand('up')
 }
 
+function sendSpacebrewLocation() {
+	let x = document.getElementsByName('x')[0].value
+	let y = document.getElementsByName('y')[0].value
+
+	let p = { longitude: x, latitude: y }
+	sendSpacebrewGotoCommand(p)
+}
+
 function sendSpacebrewGotoCommand(coords) {
 	// x = (coords.longitude - rennesLongMin) / rennesLongWidth
 	// y = (coords.latitude - rennesLatMin) / rennesLatHeight
@@ -68,7 +76,17 @@ function sendSpacebrewGotoCommand(coords) {
 	sendSpacebrewCommand(data)
 }
 
+function closeConsole(event) {
+	let console = document.getElementById('console');
+	if(console.className == 'hidden') {
+		console.setAttribute( 'class', '' );
+	} else {
+		console.setAttribute( 'class', 'hidden' );
+	}
+}
+
 $(document).ready( function() {
+
 	var x = document.getElementById("info");
 
 	function getFakeLocation() {

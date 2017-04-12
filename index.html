@@ -12,8 +12,14 @@
   <body>
     <button onclick="sendSpacebrewPenDownCommand()">Pen down</button>
     <button onclick="sendSpacebrewPenUpCommand()">Pen up</button>
+    <div>
+      <div>x: <input type="number" name="x" step="any" value="48.110150999999995"/></div>
+      <div>- y: <input type="number" name="y" step="any" value="-1.6734719999999998"/></div>
+      <button onclick="sendSpacebrewLocation()">Send location</button>
+    </div>
     <div id="info"></div>
-    <div class="console">
+    <div id="console">
+      <!-- <button id="closeBtn" onclick="closeConsole()">x</button> -->
       <h3>Console</h3>
       <div id="debug"></div>
     </div>
