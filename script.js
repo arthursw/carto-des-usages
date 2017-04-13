@@ -117,10 +117,10 @@ function sendSpacebrewPenUpCommand() {
 }
 
 function sendSpacebrewLocation() {
-	let x = parseFloat(document.getElementsByName('x')[0].value)
-	let y = parseFloat(document.getElementsByName('y')[0].value)
+	let long = parseFloat(document.getElementsByName('long')[0].value)
+	let lat = parseFloat(document.getElementsByName('lat')[0].value)
 
-	let p = { longitude: x, latitude: y }
+	let p = { longitude: long, latitude: lat }
 	sendSpacebrewGotoCommand(p)
 }
 
@@ -128,17 +128,26 @@ function sendSpacebrewGotoCommand(coords) {
 	// x = (coords.longitude - rennesLongMin) / rennesLongWidth
 	// y = (coords.latitude - rennesLatMin) / rennesLatHeight
 
-	rennesLatMin = parseFloat(document.getElementsByName('min-lat')[0].value)
-	rennesLatMax = parseFloat(document.getElementsByName('max-lat')[0].value)
-	rennesLongMin = parseFloat(document.getElementsByName('min-long')[0].value)
-	rennesLongMax = parseFloat(document.getElementsByName('max-long')[0].value)
-	if(coords.longitude < rennesLongMin) {
+	let newRennesLatMin = parseFloat(document.getElementsByName('min-lat')[0].value)
+	let newRennesLatMax = parseFloat(document.getElementsByName('max-lat')[0].value)
+	let newRennesLongMin = parseFloat(document.getElementsByName('min-long')[0].value)
+	let newRennesLongMax = parseFloat(document.getElementsByName('max-long')[0].value)
+
+	rennesLatMin = Number.isFinite(newRennesLatMin) ? newRennesLatMin : rennesLatMin
+	rennesLatMax = Number.isFinite(newRennesLatMax) ? newRennesLatMax : rennesLatMax
+	rennesLongMin = Number.isFinite(newRennesLongMin) ? newRennesLongMin : rennesLongMin
+	rennesLongMax = Number.isFinite(newRennesLongMax) ? newRennesLongMax : rennesLongMax
+
+	rennesLongWidth = rennesLongMax - rennesLongMin
+	rennesLatHeight = rennesLatMax - rennesLatMin
+
+	if(!Number.isFinite(coords.longitude) || coords.longitude < rennesLongMin) {
 		coords.longitude = rennesLongMin;
 	}
 	if(coords.longitude > rennesLongMax) {
 		coords.longitude = rennesLongMax;
 	}
-	if(coords.latitude < rennesLatMin) {
+	if(!Number.isFinite(coords.latitude) || coords.latitude < rennesLatMin) {
 		coords.latitude = rennesLatMin;
 	}
 	if(coords.latitude > rennesLatMax) {
@@ -148,7 +157,8 @@ function sendSpacebrewGotoCommand(coords) {
 		type: 'goTo',
 		point: { x: coords.longitude, y: coords.latitude },
 		bounds: { x: rennesLongMin, y: rennesLatMin, width: rennesLongWidth, height: rennesLatHeight },
-		scale: 100
+		scale: { x: 1, y: -1 },
+		offset: { x: 0, y: -rennesLatHeight }
 	}
 	sendSpacebrewCommand(data)
 }
