@@ -117,8 +117,8 @@ function sendSpacebrewPenUpCommand() {
 }
 
 function sendSpacebrewLocation() {
-	let x = document.getElementsByName('x')[0].value
-	let y = document.getElementsByName('y')[0].value
+	let x = parseFloat(document.getElementsByName('x')[0].value)
+	let y = parseFloat(document.getElementsByName('y')[0].value)
 
 	let p = { longitude: x, latitude: y }
 	sendSpacebrewGotoCommand(p)
@@ -128,10 +128,10 @@ function sendSpacebrewGotoCommand(coords) {
 	// x = (coords.longitude - rennesLongMin) / rennesLongWidth
 	// y = (coords.latitude - rennesLatMin) / rennesLatHeight
 
-	rennesLatMin = document.getElementsByName('min-lat')[0].value
-	rennesLatMax = document.getElementsByName('max-lat')[0].value
-	rennesLongMin = document.getElementsByName('min-long')[0].value
-	rennesLongMax = document.getElementsByName('max-long')[0].value
+	rennesLatMin = parseFloat(document.getElementsByName('min-lat')[0].value)
+	rennesLatMax = parseFloat(document.getElementsByName('max-lat')[0].value)
+	rennesLongMin = parseFloat(document.getElementsByName('min-long')[0].value)
+	rennesLongMax = parseFloat(document.getElementsByName('max-long')[0].value)
 	if(coords.longitude < rennesLongMin) {
 		coords.longitude = rennesLongMin;
 	}
