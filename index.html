@@ -27,14 +27,22 @@
       <button onclick="sendSpacebrewLocation()">Send custom location</button>
 
       <button id="GPSon" onclick="GPSonClicked()">Start sending GPS location...</button>
-      <button id="GPSoff" onclick="GPSoffClicked()">Stop sending GPS location...</button>
+      <button id="GPSoff" class="hidden" onclick="GPSoffClicked()">Stop sending GPS location...</button>
       <div id="gps-status">Not sending GPS locations.</div>
     </div>
     <div id="info"></div>
+    <div>
+      <h3>Data</h3>
+      <div id="data"></div>  
+    </div>
+    
     <div id="console">
       <!-- <button id="closeBtn" onclick="closeConsole()">x</button> -->
       <h3>Console</h3>
-      <div id="debug"></div>
+      <div id="console-container">
+        <div id="debug"></div>
+      </div>
+      
     </div>
   </body>
   

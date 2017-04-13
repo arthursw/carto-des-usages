@@ -25,11 +25,11 @@ button {
 
 #console {
 	font-size: 14px;
-	position: fixed;
-	top: 0;
-	left: 50%;
-	right: 0;
-	bottom: 0;
+	// position: fixed;
+	// top: 0;
+	// left: 50%;
+	// right: 0;
+	// bottom: 0;
 	color: #cddc39;
 	background-color: #313131;
 	font-family: monospace;
@@ -41,17 +41,20 @@ button {
 	color: red;
 }
 
+#console-container {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
 #console #closeBtn {
 	margin-left: -20px;
 	width: 20px;
 	height: 20px;
 }
 
-#console h3 {		
-	margin-top: 20px;
-	margin-bottom: 5px;
-	margin-left: 20px;
-	margin-right: 20px;
+h3 {		
+	font-size: 24px;
 }
 
 #console .error {
@@ -63,6 +66,8 @@ button {
 	margin-right: 20px;
 	margin-bottom: 20px;
 	overflow: scroll;
+	height: 100%;
+	width: 100%;
 }
 
 // #debug::-webkit-scrollbar {

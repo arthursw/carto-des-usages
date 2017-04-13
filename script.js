@@ -121,7 +121,8 @@ function sendSpacebrewLocation() {
 	let lat = parseFloat(document.getElementsByName('lat')[0].value)
 
 	let p = { longitude: long, latitude: lat }
-	sendSpacebrewGotoCommand(p)
+
+	sendSpacebrewGotoCommand(p);
 }
 
 function sendSpacebrewGotoCommand(coords) {
@@ -153,6 +154,10 @@ function sendSpacebrewGotoCommand(coords) {
 	if(coords.latitude > rennesLatMax) {
 		coords.latitude = rennesLatMax;
 	}
+
+	let dataElem = document.getElementById("data");
+	dataElem.innerHTML += '<div>' + coords.longitude + ", " + coords.latitude + '</div>';
+
 	data = {
 		type: 'goTo',
 		point: { x: coords.longitude, y: coords.latitude },
