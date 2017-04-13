@@ -50,10 +50,19 @@ function sendSpacebrewCommand(data) {
 
 }
 
+function gpsError(positionError) {
+		console.error("GPS error: code: " + positionError.code + ", message: " + positionError.message);
+}
+
 function getLocation() {
     console.log("get location")
     if (navigator.geolocation) {
-    	navigator.geolocation.getCurrentPosition(showPosition)
+    	var options = {
+		  enableHighAccuracy: true,
+		  timeout: 4000,
+		  maximumAge: 0
+		}
+    	navigator.geolocation.getCurrentPosition(showPosition, gpsError, options)
         // navigator.geolocation.watchPosition(showPosition, geo_error, {enableHighAccuracy:true, maximumAge:1000, timeout:1000});
     } else {
     	let info = document.getElementById("info");
@@ -91,7 +100,7 @@ function GPSonClicked() {
 	gpsOn = true;
 	let gpsStatus = document.getElementById("gps-status");
 	gpsStatus.innerHTML = "Sending GPS locations."
-	gpsTimerId = setInterval(getLocation, 10000)
+	gpsTimerId = setInterval(getLocation, 4000)
 }
 
 // function setBounds() {
