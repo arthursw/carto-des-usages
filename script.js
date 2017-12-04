@@ -30,7 +30,7 @@ window.onerror = function(error, url, line) {
 	debugEl.innerHTML += '<div class="error"><span class="line">' + line + '</span>: <span class="url">' + url + '</span>: ' + error + '</div>'
 };
 
-function connectWebsocket() {
+function connectWebsocket(){
 	let url = document.getElementsByName('websocket-url')[0].value
 	
 	if(tipiSocket != null && tipiSocket.readyState == WebSocket.OPEN) {
@@ -151,16 +151,16 @@ function sendSpacebrewGotoCommand(coords) {
 	rennesLongWidth = rennesLongMax - rennesLongMin
 	rennesLatHeight = rennesLatMax - rennesLatMin
 
-	if(!Number.isFinite(coords.longitude) || coords.longitude < rennesLongMin) {
+	if(!Number.isFinite(coords.longitude) || coords.longitude < rennesLongMin){
 		coords.longitude = rennesLongMin;
 	}
-	if(coords.longitude > rennesLongMax) {
+	if(coords.longitude > rennesLongMax){
 		coords.longitude = rennesLongMax;
 	}
-	if(!Number.isFinite(coords.latitude) || coords.latitude < rennesLatMin) {
+	if(!Number.isFinite(coords.latitude) || coords.latitude < rennesLatMin){
 		coords.latitude = rennesLatMin;
 	}
-	if(coords.latitude > rennesLatMax) {
+	if(coords.latitude > rennesLatMax){
 		coords.latitude = rennesLatMax;
 	}
 
